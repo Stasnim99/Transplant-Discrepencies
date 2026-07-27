@@ -1,85 +1,83 @@
-# Transplant Volumes and Racial Disparities: A Data Analysis of U.S. Organ Allocation (2018–2025)
+# The Relationship Between Respiratory Health and Cities
 
 **By:** Sumaiya Tasnim
-**Saint Peter's University — DS-399-IS, Dr. Gulhan Bizel**
-**August 2025**
-
-📄 [Read the full paper](Racial%20Disparities%20In%20Transplants%20In%20The%20United%20States%20.pdf)
 
 ## Overview
-Organ transplantation is a critical, life-saving procedure for individuals with end-stage organ failure, yet persistent disparities continue to shape who receives a transplant and who does not. By mid-2025, more than 103,000 people were waiting for a transplant, and on average 13 people die each day while waiting for an organ. This project analyzes U.S. organ transplant data from 2018–2025 to examine changes in transplant volumes, the distribution of living versus deceased donor transplants, and patterns among patients on the waiting list — aiming to highlight inequities in transplant access across race and ethnicity.
+Urban areas are seeing steady increases in asthma, COPD, and other respiratory illnesses, much of which can be traced to the air city residents breathe every day. Outdoor air pollution tends to be more concentrated in urban settings because of dense traffic networks, industrial facilities, older heating systems, and limited green space. Pollutants such as PM₂.₅, PM₁₀, NO₂, SO₂, CO, and ozone are small enough to penetrate the lungs, trigger inflammation, worsen chronic respiratory conditions, and increase susceptibility to infection. This project explores whether common air pollutants, AQI, and weather conditions are statistically associated with respiratory health outcomes using real-world air quality and health impact data.
 
-## Introduction
-Becoming an organ donor requires meeting multiple criteria, including age, medical history, and family history, and further testing is needed to ensure a recipient's body will accept the organ rather than reject it. In some cases, race and ethnicity are considered during matching, as genetic and immunologic factors can influence compatibility. While sharing the same ethnicity is not required for donor–recipient matching, having a larger and more diverse donor registry improves the chances of finding a suitable match for everyone on the waiting list.
+## Introduction & Problem Statement
+A large body of research has documented how sensitive respiratory health is to changes in air pollution:
 
-Prior research has documented differences in transplant access by race, ethnicity, age, and donor type, but many of these disparities remain poorly understood when examined over time and across populations. This study uses data from 2018 to 2025 to examine transplant volume trends, donor type distribution, and waiting list patterns, aiming to better understand who is waiting, who receives transplants, and how these trends have evolved.
+- **Bell et al. (2007)** found that even modest increases in particulate matter led to noticeable spikes in asthma attacks and emergency department visits.
+- **Stieb et al. (2009)** showed that short-term surges in particulate matter were closely tied to hospital admissions for asthma and COPD across multiple cities.
+- **O'Connor et al. (2008)** highlighted that children are especially vulnerable, showing higher ER visits even from relatively small pollution increases.
+- **Brugha and Grigg (2014)** described how chronic exposure slowly reshapes the airways, weakens lung function, and raises the risk of developing persistent respiratory disease.
 
-## Data
-- **Input file:** `Capstone.csv` (not included in this repo — add your own copy locally to run the script)
-- Publicly available U.S. transplant registry data (OPTN/UNOS-style reporting) covering 2018–2025, including transplant volumes by race/ethnicity, donor type (living or deceased), patient age groups, and waiting list size.
+Pollution is also unevenly distributed across neighborhoods. **Gryech et al. (2022)** and **Slama et al. (2019)** found that road density, traffic flow, industrial zoning, and access to green space create pockets where air quality is substantially worse than the city average. **Jiang et al. (2024)** add that these pollution–health relationships are not static — they shift as cities change through new transportation policy, climate conditions, or redevelopment. Environmental justice research (PJSS Review, CS Review Journal) further shows that lower-income, immigrant, and historically marginalized communities tend to bear a disproportionate share of pollution-related harm, often living closer to highways, industrial corridors, and crowded housing developments with fewer resources to mitigate exposure.
 
-## Methods
-Data cleaning and preparation were completed in R Studio, where raw tables were transformed into tidy data frames for analysis:
+Given these combined challenges, this project aims to bring together environmental and health data to better understand respiratory risk in cities — modeling pollution exposure, analyzing how pollutant levels relate to respiratory health outcomes, and (eventually) mapping where these risks are most concentrated.
 
-1. **Data wrangling:** Extract relevant rows/columns for race and age-group breakdowns, clean numeric formatting (e.g., remove commas), and reshape from wide to long format using `tidyr::pivot_longer`.
-2. **Donor type analysis:** Join total and deceased-donor transplant data to derive living-donor transplant counts.
-3. **Descriptive statistics:** Averages, maximums, minimums, and standard deviations of transplant counts across racial and ethnic groups.
-4. **Trend analysis:** Year-over-year percentage changes (via `mutate`) and each group's share of total transplants per year.
-5. **Visualization:** `ggplot2` line plots, faceted plots, and summary charts showing transplant activity by year, donor type, and race/ethnicity.
+## Methodology
 
-Waiting list data was also summarized and compared against actual transplant rates to highlight mismatches between supply and demand.
+### Planned / broader study design
+The full study design calls for combining several complementary data sources: ground-based measurements (EPA AirData, OpenAQ), satellite Aerosol Optical Depth data (NASA MODIS/VIIRS) to fill spatial gaps, weather data (NOAA), and land-use/road network data (OpenStreetMap) to train a machine learning model (Random Forest or XGBoost) predicting PM₂.₅ at a fine spatial scale, following approaches used in Slama et al. (2019) and Gryech et al. (2022). On the health side, the plan is to analyze daily respiratory ER visits/hospital admissions via Quasi-Poisson regression and Distributed Lag Nonlinear Models (DLNMs) to capture both immediate and delayed effects of exposure (as in Stieb et al., 2009; O'Connor et al., 2008), adjusting for temperature, humidity, day of week, and seasonal trends. A spatial analysis stage would map exposure and health outcomes against census/ACS socioeconomic indicators, using hotspot detection (Local Moran's I, Getis-Ord Gi) to find neighborhoods where high pollution and elevated respiratory illness coincide.
+
+### Analysis completed so far
+The portion of the study actually implemented in R uses an urban air quality/health impact dataset containing daily pollutant measurements, weather variables, and a composite respiratory health impact score:
+
+1. Load and clean the dataset; standardize column names.
+2. Auto-detect pollutant, health outcome, and control (weather/seasonal) variables via pattern matching.
+3. Coerce relevant columns to numeric and drop incomplete records.
+4. Compute a Pearson correlation matrix across pollutants, AQI, health impact score, and weather controls.
+5. Visualize relationships with a pairwise scatterplot matrix (`GGally::ggpairs`).
 
 ## Packages Used
-`tidyverse` (`dplyr`, `tidyr`, `ggplot2`)
+`tidyverse`, `skimr`, `GGally`, `broom`, `car`, `mgcv`
 
 ## Results
 
-Between 2018 and 2024, transplant volumes increased steadily across all racial and ethnic groups. However, 2025 saw a sudden, significant drop across all groups — likely due to incomplete data for the still-ongoing year rather than a genuine reversal of the trend. A smaller dip in 2020 likely reflects COVID-19 pandemic disruptions to elective and transplant surgeries.
+The correlation matrix revealed that **AQI had the strongest relationship with the health impact score (r = 0.615)** — a moderately strong positive association, meaning that as overall air quality worsens, respiratory health impacts increase. Individual pollutants showed weaker positive correlations: PM₂.₅ (r = 0.220), PM₁₀ (r = 0.183), O₃ (r = 0.158), NO₂ (r = 0.124), and SO₂ (r ≈ 0.016). Weather variables (temperature, humidity, wind speed) showed correlations close to zero, indicating no strong direct relationship with the health impact score in this dataset.
 
-![Transplant volumes by race, 2018-2025](figure1-transplant-volumes-by-race.png)
+![Correlation matrix of pollutants, AQI, weather, and health impact score](airquality-correlation-matrix.png)
 
-**Figure 1.** Transplant volumes by race from 2018 to 2025. All groups experienced steady growth in transplant numbers until a noticeable drop in 2025.
+**Console output.** Pearson correlation matrix across AQI, individual pollutants (PM10, PM2.5, NO2, SO2, O3), weather variables, and the health impact score.
 
-Throughout the study period, a clear and consistent disparity emerged across racial and ethnic groups. White, Non-Hispanic patients received the highest number of transplants each year, averaging approximately **20,133** transplants annually, compared to **8,590** for Black, Non-Hispanic patients and **6,968** for Hispanic/Latino patients. White patients also showed the highest year-to-year variability (SD = 5,011), while Black and Hispanic/Latino patients had both lower and less variable transplant counts — suggesting more rigid, consistent barriers to access.
+The pairwise scatterplot matrix supported these findings — most variable pairs showed dense, cloud-like distributions with no clear linear pattern, consistent with the low correlation values. The AQI–health impact relationship stood out as the clearest trend among the variables analyzed.
 
-![Summary statistics by race](figure2-summary-statistics-by-race.png)
+![Pairwise scatterplot matrix of pollutants and AQI](airquality-pairwise-scatterplot.png)
 
-**Figure 2.** Statistical summary of transplant counts by race and ethnicity, showing the average, maximum, minimum, and variability over the study period.
-
-Across all groups, the majority of transplants relied on deceased donors, most notably among White, Non-Hispanic patients (~16,228/year on average — nearly double Black and Hispanic/Latino patients). The gap was even wider for living donor transplants: White patients averaged 3,905 living-donor transplants per year, versus just 719 for Black patients and 1,040 for Hispanic/Latino patients — a disparity that may reflect socioeconomic barriers, reduced access to donor networks, healthcare education gaps, or mistrust in the medical system.
-
-![Transplant volumes by donor type and race](figure3-donor-type-by-race.png)
-
-**Figure 3.** Breakdown of transplants by donor type (deceased vs. living) and race/ethnicity between 2018 and 2025. Deceased donors accounted for the majority of transplants across all groups.
-
-White, Non-Hispanic patients consistently accounted for the largest share of total transplants each year, despite Black and Hispanic/Latino patients making up a significant portion of the waiting list — pointing to systemic issues in organ allocation rather than population differences alone.
-
-![Yearly transplant totals and year-over-year change by race](figure4-yearly-change-by-race.png)
-
-**Figure 4.** Yearly transplant totals, donor type breakdown, and year-over-year percent change by race.
-
-As of September 2024, the largest segment of the national waiting list was adults aged 50–64 (43,829 people), followed by those 65+ (26,460); patients under 18 made up fewer than 1,000. By race/ethnicity (2023 data), the waiting list was led by White patients (40,476), followed by Black patients (28,552) and Hispanic/Latino patients (23,757) — yet Black and Hispanic patients' actual transplant rates remained disproportionately low relative to their share of the waiting list.
-
-## Discussion
-From 2018 through 2024, transplant volumes increased for all major groups — a promising trend on the surface. But White, Non-Hispanic patients consistently received far more transplants than Black and Hispanic/Latino patients every year, a gap too large and persistent to be explained by population size or health needs alone. This points to structural barriers shaping who gets access to life-saving care.
-
-Donor type compounds the disparity: White, Non-Hispanic patients received nearly four times as many living-donor transplants as Black or Hispanic/Latino patients. Living-donor transplants tend to offer better outcomes and shorter wait times, making this gap especially consequential. The low numbers for Black and Hispanic patients likely reflect systemic challenges — lower rates of health insurance and transplant education access, financial hardship, and higher likelihood of disqualifying health conditions within close family networks — rather than a lack of willingness to donate.
-
-The sharp 2025 decline across all groups is most plausibly explained by incomplete data collection or reporting delays for a year still in progress, underscoring the importance of interpreting recent-year data cautiously and looking at multi-year trends rather than any single year.
+**Pairwise scatterplot matrix (`GGally::ggpairs`).** Relationships among record ID, AQI, PM10, and temperature, with correlation coefficients annotated in each panel.
 
 ## Conclusion
-This study reinforces what the data makes undeniable: access to organ transplantation in the U.S. remains unequal. While transplant volumes have increased overall, the distribution continues to favor White, Non-Hispanic patients in both deceased- and living-donor cases, while Black and Hispanic/Latino patients — despite comprising a large share of the waiting list — consistently receive fewer transplants. Closing this gap requires more than adding donors to the system; it requires addressing the barriers tied to education, economics, systemic bias, and unequal access to care — shifting from awareness to accountability, and from data collection to equity-driven change.
+This analysis provides quantitative support for the well-established link between air pollution and respiratory health. While individual pollutants showed comparatively weak correlations, AQI demonstrated a moderately strong relationship with the health impact score, reinforcing its value as a summary measure of air quality risk. The results align with prior research while also highlighting the complexity of urban pollution systems, where no single pollutant fully explains health outcomes.
+
+## Future Work
+- Fit regression models (e.g., linear or generalized additive models via `mgcv`) of the health impact score on pollutants and controls, rather than relying on correlation alone.
+- Incorporate time-series methods (Quasi-Poisson regression, DLNMs) to capture lagged pollution effects.
+- Bring in spatial and socioeconomic data to examine neighborhood-level disparities in exposure and outcomes, as outlined in the broader study design above.
 
 ## How to Run
-1. Open `Capstone R Coding.R` in RStudio.
-2. Place `Capstone.csv` in the working directory.
-3. Run the script top to bottom to reproduce the visualizations and summary tables.
+1. Open `Air Quality Research.R` in RStudio.
+2. Place `air_quality_health_impact_data.csv` in the working directory.
+3. Run the script top to bottom; required packages will be installed automatically if missing.
 
-## Note
-Row indices used to extract race and age-group data are based on manual inspection of the source file's layout — if using a differently formatted transplant dataset, these indices will need to be adjusted.
-
-## References
-- Detailed Description of Data | organdonor.gov. (2024, October 17). Organ Donation. https://www.organdonor.gov/learn/organ-donation-statistics/detailed-description#fig1
-- Detailed Description of Data | organdonor.gov. (2024, October 17). Organ Donation. https://www.organdonor.gov/learn/organ-donation-statistics/detailed-description#fig2
-- Organ Transplants and Black/African Americans | Office of Minority Health. (2025, February 13). https://minorityhealth.hhs.gov/organ-transplants-and-blackafrican-americans
-- Racial and ethnic disparities on the heart transplant waiting list. (2025, March 15). PubMed. https://pubmed.ncbi.nlm.nih.gov/39814184/
+## Data Sources Referenced in the Paper
+1. https://pmc.ncbi.nlm.nih.gov/articles/PMC1913584/
+2. https://www.mdpi.com/1660-4601/19/5/3095
+3. https://link.springer.com/article/10.1007/s11356-019-04781-3
+4. https://link.springer.com/article/10.1186/1476-069x-8-25#Sec3
+5. https://www.sciencedirect.com/science/article/abs/pii/S0091674908004077
+6. https://www.sciencedirect.com/science/article/abs/pii/S1526054214000281
+7. https://link.springer.com/article/10.1186/s12940-024-01083-1
+8. https://pjssreview.com/index.php/13/article/view/4
+9. https://csreviewjournal.com/index.php/10/article/view/11
+10. https://pmc.ncbi.nlm.nih.gov/articles/PMC59535/#ref-list1
+11. https://pmc.ncbi.nlm.nih.gov/articles/PMC59535/#sec9
+12. https://pmc.ncbi.nlm.nih.gov/articles/PMC8541932/
+13. https://pmc.ncbi.nlm.nih.gov/articles/PMC6351918/
+14. https://pmc.ncbi.nlm.nih.gov/articles/PMC3155438/
+15. https://pmc.ncbi.nlm.nih.gov/articles/PMC10487870/
+16. https://pmc.ncbi.nlm.nih.gov/articles/PMC12677569/
+17. https://pmc.ncbi.nlm.nih.gov/articles/PMC8718688/
+18. https://pmc.ncbi.nlm.nih.gov/articles/PMC11451890/
+19. https://pmc.ncbi.nlm.nih.gov/articles/PMC10990824/
