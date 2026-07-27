@@ -36,26 +36,25 @@ Waiting list data was also summarized and compared against actual transplant rat
 
 Between 2018 and 2024, transplant volumes increased steadily across all racial and ethnic groups. However, 2025 saw a sudden, significant drop across all groups — likely due to incomplete data for the still-ongoing year rather than a genuine reversal of the trend. A smaller dip in 2020 likely reflects COVID-19 pandemic disruptions to elective and transplant surgeries.
 
-<img width="2409" height="1335" alt="image" src="https://github.com/user-attachments/assets/0c4af814-0542-4e8b-967b-d55608b0e0b3" />
-
+![Transplant volumes by race, 2018-2025](figure1-transplant-volumes-by-race.png)
 
 **Figure 1.** Transplant volumes by race from 2018 to 2025. All groups experienced steady growth in transplant numbers until a noticeable drop in 2025.
 
 Throughout the study period, a clear and consistent disparity emerged across racial and ethnic groups. White, Non-Hispanic patients received the highest number of transplants each year, averaging approximately **20,133** transplants annually, compared to **8,590** for Black, Non-Hispanic patients and **6,968** for Hispanic/Latino patients. White patients also showed the highest year-to-year variability (SD = 5,011), while Black and Hispanic/Latino patients had both lower and less variable transplant counts — suggesting more rigid, consistent barriers to access.
 
-![Summary statistics by race](images/figure2-summary-statistics-by-race.png)
+![Summary statistics by race](figure2-summary-statistics-by-race.png)
 
 **Figure 2.** Statistical summary of transplant counts by race and ethnicity, showing the average, maximum, minimum, and variability over the study period.
 
 Across all groups, the majority of transplants relied on deceased donors, most notably among White, Non-Hispanic patients (~16,228/year on average — nearly double Black and Hispanic/Latino patients). The gap was even wider for living donor transplants: White patients averaged 3,905 living-donor transplants per year, versus just 719 for Black patients and 1,040 for Hispanic/Latino patients — a disparity that may reflect socioeconomic barriers, reduced access to donor networks, healthcare education gaps, or mistrust in the medical system.
 
-![Transplant volumes by donor type and race](images/figure3-donor-type-by-race.png)
+![Transplant volumes by donor type and race](figure3-donor-type-by-race.png)
 
 **Figure 3.** Breakdown of transplants by donor type (deceased vs. living) and race/ethnicity between 2018 and 2025. Deceased donors accounted for the majority of transplants across all groups.
 
 White, Non-Hispanic patients consistently accounted for the largest share of total transplants each year, despite Black and Hispanic/Latino patients making up a significant portion of the waiting list — pointing to systemic issues in organ allocation rather than population differences alone.
 
-![Yearly transplant totals and year-over-year change by race](images/figure4-yearly-change-by-race.png)
+![Yearly transplant totals and year-over-year change by race](figure4-yearly-change-by-race.png)
 
 **Figure 4.** Yearly transplant totals, donor type breakdown, and year-over-year percent change by race.
 
