@@ -36,7 +36,8 @@ Waiting list data was also summarized and compared against actual transplant rat
 
 Between 2018 and 2024, transplant volumes increased steadily across all racial and ethnic groups. However, 2025 saw a sudden, significant drop across all groups — likely due to incomplete data for the still-ongoing year rather than a genuine reversal of the trend. A smaller dip in 2020 likely reflects COVID-19 pandemic disruptions to elective and transplant surgeries.
 
-![Transplant volumes by race, 2018–2025](images/figure1-transplant-volumes-by-race.png)
+<img width="2409" height="1335" alt="image" src="https://github.com/user-attachments/assets/0c4af814-0542-4e8b-967b-d55608b0e0b3" />
+
 
 **Figure 1.** Transplant volumes by race from 2018 to 2025. All groups experienced steady growth in transplant numbers until a noticeable drop in 2025.
 
